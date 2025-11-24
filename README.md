@@ -1,6 +1,9 @@
 # Insurance-Cost-Estimation-Healthcare-Analytics-Capstone-Project
 **Author:** Sangram Keshari Patro
-Go this this link for the presentation of this project:-  https://healthcare-capstone-proj-o60ijkm.gamma.site/
+
+Go this this link for the Deployment of this project:-  [Click to Open Deployment](https://healthcare-capstone-proj-o60ijkm.gamma.site/)
+Go this this link for the presentation of this project:-  [Click to Open Presentation](https://healthcare-capstone-proj-o60ijkm.gamma.site/)
+
 
 ## 📌 Project Summary
 
