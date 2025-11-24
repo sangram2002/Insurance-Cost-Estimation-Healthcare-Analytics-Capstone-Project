@@ -1,8 +1,7 @@
 numpy
 pandas
 shap
-scikit-learn==1.2.2
-scipy
+scikit-learn==1.5.2
 statsmodels
 seaborn
 imblearn
@@ -10,5 +9,6 @@ xgboost
 streamlit
 streamlit-searchbox
 plotly
+
 
 
