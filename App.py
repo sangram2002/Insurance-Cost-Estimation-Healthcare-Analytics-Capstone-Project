@@ -23,15 +23,15 @@ st.markdown("""
     }
     
     .main .stMarkdown {
-        color: #000000 !important;
+        color: #ffffff  !important;
     }
     
     .main h1, .main h2, .main h3, .main h4, .main h5, .main h6 {
-        color: #000000 !important;
+        color: #ffffff  !important;
     }
     
     .main p, .main span, .main div {
-        color: #000000 !important;
+        color: #ffffff  !important;
     }
     
     /* Sidebar - white text */
@@ -49,17 +49,17 @@ st.markdown("""
     
     /* Input elements styling */
     .stSlider label, .stNumberInput label, .stSelectbox label {
-        color: #000000 !important;
+        color: #ffffff  !important;
         font-weight: 500;
     }
     
     /* Metric styling */
     [data-testid="stMetricLabel"] {
-        color: #000000 !important;
+        color: #ffffff  !important;
     }
     
     [data-testid="stMetricValue"] {
-        color: #000000 !important;
+        color: #ffffff !important;
     }
     
     /* Button styling */
@@ -108,14 +108,15 @@ st.markdown("""
     /* Info boxes with dark text */
     .info-box {
         background-color: #e3f2fd;
-        padding: 15px;
+        padding: 15px
+            
         border-radius: 10px;
         border-left: 5px solid #2196F3;
         margin: 10px 0;
-        color: #000000 !important;
+        color: white !important;
     }
     .info-box * {
-        color: #000000 !important;
+        color: white !important;
     }
     
     .warning-box {
@@ -124,11 +125,9 @@ st.markdown("""
         border-radius: 10px;
         border-left: 5px solid #ff9800;
         margin: 10px 0;
-        color: #000000 !important;
+        color: white !important;
     }
-    .warning-box * {
-        color: #000000 !important;
-    }
+
     
     .success-box {
         background-color: #e8f5e9;
@@ -136,27 +135,20 @@ st.markdown("""
         border-radius: 10px;
         border-left: 5px solid #4caf50;
         margin: 10px 0;
-        color: #000000 !important;
+        color: white !important;
     }
-    .success-box * {
-        color: #000000 !important;
-    }
-    
+
     .danger-box {
         background-color: #ffebee;
         padding: 15px;
         border-radius: 10px;
         border-left: 5px solid #f44336;
         margin: 10px 0;
-        color: #000000 !important;
+        color: white !important;
     }
-    .danger-box * {
-        color: #000000 !important;
-    }
-    
     /* Tab styling */
     .stTabs [data-baseweb="tab-list"] button [data-testid="stMarkdownContainer"] p {
-        color: #000000 !important;
+        color: white !important;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -219,17 +211,9 @@ def predict_cost(regular_checkups_last_year, weight, covered_by_other_company, w
 
     # Get prediction
     prediction = model.predict(input_df)[0]  # Extract scalar value
-    
-    # Calculate contributions for visualization
-    contributions = {
-        'Base Cost': 5000,
-        'Weight Impact': (weight - 70) * 520 + (weight_squared - 4900) * 0.12,
-        'Checkups Benefit': regular_checkups_last_year * (-1200),
-        'Coverage Status': covered_binary * 3200,
-        'Weight Stability': abs(weight_change_last_year) * 180,
-    }
+   
 
-    return float(prediction), contributions
+    return float(prediction)
 
 # ========================================
 # HEADER
@@ -379,7 +363,7 @@ with tab1:
     
     if predict_button:
         with st.spinner("Calculating insurance cost..."):
-            predicted_cost, contributions = predict_cost(
+            predicted_cost = predict_cost(
                 regular_checkups, 
                 weight, 
                 covered_by_other,
@@ -441,84 +425,9 @@ with tab1:
                 <strong>💡 Recommendation:</strong> {recommendation}
             </div>
             """, unsafe_allow_html=True)
-        
-        st.markdown("### 📊 Cost Breakdown Analysis")
-        
-        contributions['Total'] = predicted_cost_value
-        
-        fig = go.Figure(go.Waterfall(
-            name="Cost Components",
-            orientation="v",
-            measure=["relative"] * (len(contributions) - 1) + ["total"],
-            x=list(contributions.keys()),
-            textposition="outside",
-            text=[f"₹{v:,.0f}" for v in contributions.values()],
-            y=list(contributions.values()),
-            connector={"line": {"color": "rgb(63, 63, 63)"}},
-            increasing={"marker": {"color": "#f44336"}},
-            decreasing={"marker": {"color": "#4caf50"}},
-            totals={"marker": {"color": "#667eea"}}
-        ))
-        
-        fig.update_layout(
-            title="Insurance Cost Breakdown",
-            showlegend=False,
-            height=400,
-            template="plotly_white"
-        )
-        
-        st.plotly_chart(fig, use_container_width=True)
-        
-        st.markdown("### 🔍 Detailed Insights")
-        
-        col_insight1, col_insight2 = st.columns(2)
-        
-        with col_insight1:
-            st.markdown("#### Key Contributing Factors")
-            st.markdown(f"""
-            - **Weight Impact**: ₹{contributions['Weight Impact']:,.2f}
-            - **Checkup Benefit**: ₹{contributions['Checkups Benefit']:,.2f}
-            - **Coverage Status**: ₹{contributions['Coverage Status']:,.2f}
-            - **Weight Stability**: ₹{contributions['Weight Stability']:,.2f}
-            
-            **Feature Values:**
-            - Weight: {weight} kg
-            - Weight²: {weight**2:,.1f}
-            - Weight × Checkups: {weight * regular_checkups:,.1f}
-            - Weight × Weight Change: {weight * weight_change:,.1f}
-            """)
-        
-        with col_insight2:
-            st.markdown("#### Potential Savings Opportunities")
-            
-            total_savings = 0
-            
-            if regular_checkups < 3:
-                checkup_savings = (3 - regular_checkups) * 1200
-                total_savings += checkup_savings
-                st.success(f"💰 Increase checkups to 3/year: Save ₹{checkup_savings:,.0f}")
-            
-            if weight > 75:
-                weight_savings = (weight - 75) * 520
-                total_savings += weight_savings
-                st.success(f"💰 Reduce weight to 75kg: Save ₹{weight_savings:,.0f}")
-            
-            if abs(weight_change) > 2:
-                stability_savings = (abs(weight_change) - 2) * 180
-                total_savings += stability_savings
-                st.success(f"💰 Stabilize weight: Save ₹{stability_savings:,.0f}")
-            
-            if total_savings > 0:
-                st.markdown(f"""
-                <div class="success-box">
-                    <strong>🎯 Total Potential Savings: ₹{total_savings:,.0f}</strong><br>
-                    New Estimated Cost: ₹{predicted_cost_value - total_savings:,.0f}
-                </div>
-                """, unsafe_allow_html=True)
-            else:
-                st.balloons()
-                st.success("🎉 Optimal health profile! You're maximizing your savings!")
 
+        
+        
 with tab2:
     st.markdown("## 📈 Model Performance & Insights")
     
@@ -688,9 +597,9 @@ with tab3:
 
 st.markdown("---")
 st.markdown(f"""
-    <div style="text-align: center; color: #000000; padding: 20px;">
-        <p style="color: #000000;"><strong>Healthcare Insurance Cost Predictor</strong></p>
-        <p style="color: #000000;">Developed by: Sangram Keshari Patro | PG Program in Data Science and Business Analytics</p>
-        <p style="color: #000000;">Powered by Gradient Boosting Machine | Model R²: {metrics['r2']:.4f}</p>
+    <div style="text-align: center; padding: 20px;">
+        <p style="color: #3b82f6;"><strong>Healthcare Insurance Cost Predictor</strong></p>
+        <p style="color: #3b82f6;">Developed by: Sangram Keshari Patro | PG Program in Data Science and Business Analytics</p>
+        <p style="color: #3b82f6;">Powered by Gradient Boosting Machine | Model R²: {metrics['r2']:.4f}</p>
     </div>
     """, unsafe_allow_html=True)
