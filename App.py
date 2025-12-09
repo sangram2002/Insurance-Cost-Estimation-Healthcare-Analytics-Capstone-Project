@@ -113,11 +113,9 @@ st.markdown("""
         border-radius: 10px;
         border-left: 5px solid #2196F3;
         margin: 10px 0;
-        color: white !important;
+        color: black !important;
     }
-    .info-box * {
-        color: white !important;
-    }
+
     
     .warning-box {
         background-color: #fff3e0;
@@ -125,7 +123,7 @@ st.markdown("""
         border-radius: 10px;
         border-left: 5px solid #ff9800;
         margin: 10px 0;
-        color: white !important;
+        color: black !important;
     }
 
     
@@ -135,7 +133,7 @@ st.markdown("""
         border-radius: 10px;
         border-left: 5px solid #4caf50;
         margin: 10px 0;
-        color: white !important;
+        color: black !important;
     }
 
     .danger-box {
@@ -144,7 +142,7 @@ st.markdown("""
         border-radius: 10px;
         border-left: 5px solid #f44336;
         margin: 10px 0;
-        color: white !important;
+        color: black !important;
     }
     /* Tab styling */
     .stTabs [data-baseweb="tab-list"] button [data-testid="stMarkdownContainer"] p {
